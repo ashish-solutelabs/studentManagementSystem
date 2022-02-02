@@ -8,7 +8,6 @@ var port = 8000;
 var routePath = require('./routes/studentroute');
 
 
-
 app.use("/", routePath);
 
 
@@ -24,7 +23,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).json({
         success: 0,
         message: err.message,
-        stack: err.stack
+
     })
 })
 

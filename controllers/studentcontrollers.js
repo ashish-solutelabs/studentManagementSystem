@@ -13,7 +13,7 @@ var studentsData = JSON.parse(fs.readFileSync(path.join(__dirname, "../db/studen
 exports.getStudent = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
         return res.json({
             success: 1,
@@ -28,7 +28,7 @@ exports.getStudent = async(req, res, next) => {
 exports.getStudentByBranch = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
 
         } else {
             let branch = req.params.branch;
@@ -53,7 +53,7 @@ exports.getStudentByBranch = async(req, res, next) => {
 exports.getStudentByName = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         let firstName = req.params.firstName
@@ -66,7 +66,7 @@ exports.getStudentByName = async(req, res, next) => {
                 data: students,
             });
         } else {
-            throw new ApiError(404, "!!Record Doesn't Found");
+            throw new ApiError(404, "Record Doesn't Found");
         }
     } catch (e) {
         next(e);
@@ -77,7 +77,7 @@ exports.getStudentByName = async(req, res, next) => {
 exports.getStudentByEmail = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         let email = req.params.email
@@ -89,7 +89,7 @@ exports.getStudentByEmail = async(req, res, next) => {
                 data: students,
             })
         } else {
-            throw new ApiError(404, "!!Record Didn't Match");
+            throw new ApiError(404, "Record Didn't Match");
         }
     } catch (e) {
         next(e)
@@ -100,7 +100,7 @@ exports.getStudentByEmail = async(req, res, next) => {
 exports.getStudentById = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         let id = req.params.id
@@ -112,7 +112,7 @@ exports.getStudentById = async(req, res, next) => {
                 data: students,
             })
         } else {
-            throw new ApiError(404, "!!Record Didn't Match");
+            throw new ApiError(404, "Record Didn't Match");
 
         }
     } catch (e) {
@@ -124,7 +124,7 @@ exports.getStudentById = async(req, res, next) => {
 exports.getStudentByFirstNameOrBranch = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information") // file connecting
+            throw new ApiError(502, "Database is not connected to server") // file connecting
         }
 
         let firstName = req.params.firstName;
@@ -140,7 +140,7 @@ exports.getStudentByFirstNameOrBranch = async(req, res, next) => {
                 data: students,
             })
         } else {
-            throw new ApiError(404, "!!Record Doesn't Found");
+            throw new ApiError(404, "Record Doesn't Found");
         }
     } catch (e) {
         next(e)
@@ -151,7 +151,7 @@ exports.getStudentByFirstNameOrBranch = async(req, res, next) => {
 exports.addStudent = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
         body = req.body;
         if (body.length == 0) {
@@ -187,7 +187,7 @@ exports.addStudent = async(req, res, next) => {
             }).then(() => {
                 return res.json({
                     success: 1,
-                    message: "!!Record Submit Sucessfully",
+                    message: "Record Submit Sucessfully",
                 })
             })
         }
@@ -200,7 +200,7 @@ exports.addStudent = async(req, res, next) => {
 exports.updateStudentData = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         const id = req.params.id;
@@ -226,7 +226,7 @@ exports.updateStudentData = async(req, res, next) => {
             })
 
         } else {
-            throw new ApiError(404, "!!Record Doesn't Found");
+            throw new ApiError(404, "Record Doesn't Found");
         }
     } catch (e) {
         next(e)
@@ -237,7 +237,7 @@ exports.updateStudentData = async(req, res, next) => {
 exports.deactiveStudentData = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
         const id = req.params.id;
         let index = await studentsData.findIndex((stud) => {
@@ -258,7 +258,7 @@ exports.deactiveStudentData = async(req, res, next) => {
                 })
             })
         } else {
-            throw new ApiError(404, "!!Record Didn't Found");
+            throw new ApiError(404, "Record Didn't Found");
         }
     } catch (e) {
         next(e)
