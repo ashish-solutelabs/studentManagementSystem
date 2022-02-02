@@ -1,0 +1,18 @@
+{
+  "name": "studentmanagementsystem",
+  "version": "1.0.0",
+  "description": "Student management system with crud opearion",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Ashish Dobariya",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "express": "^4.17.2",
+    "http-error": "^0.0.6",
+    "http-errors": "^2.0.0"
+  }
+}
