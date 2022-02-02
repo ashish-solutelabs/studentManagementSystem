@@ -31,7 +31,11 @@ exports.getStudentByBranch = async(req, res, next) => {
             throw new ApiError(502, "Database is not connected to server")
 
         } else {
-            let branch = req.params.branch;
+            let branch = (req.params.branch).toUpperCase();
+
+            if (branch === "IT" || branch === "IT" || branch === "IT" || branch === "IT") {
+                throw new ApiError(404, "Your Branch is invalid");
+            }
             let students = await studentsData.filter(student => student.branch == branch);
 
 
@@ -263,4 +267,7 @@ exports.deactiveStudentData = async(req, res, next) => {
     } catch (e) {
         next(e)
     }
+}
+next(e)
+}
 }
