@@ -16,7 +16,7 @@ exports.getStudent = async(req, res, next) => {
             throw new ApiError(502, "Database is not connected to server")
         }
         return res.json({
-            success: 1,
+            success: true,
             data: studentsData,
         })
     } catch (e) {
@@ -31,17 +31,17 @@ exports.getStudentByBranch = async(req, res, next) => {
             throw new ApiError(502, "Database is not connected to server")
 
         } else {
-            let branch = (req.params.branch).toUpperCase();
+            let branch = (req.params.branch);
+            branch = branch.toUpperCase();
 
-            if (branch === "IT" || branch === "IT" || branch === "IT" || branch === "IT") {
+            if (!(branch === "IT" || branch === "ME" || branch === "EC" || branch === "EE" || branch === "CE")) {
                 throw new ApiError(404, "Your Branch is invalid");
             }
             let students = await studentsData.filter(student => student.branch == branch);
 
-
             if (students.length != 0) {
                 return res.json({
-                    success: 1,
+                    success: true,
                     data: students,
                 })
             } else {
@@ -66,7 +66,7 @@ exports.getStudentByName = async(req, res, next) => {
 
         if (students.length != 0) {
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             });
         } else {
@@ -89,7 +89,7 @@ exports.getStudentByEmail = async(req, res, next) => {
 
         if (students.length != 0) { // student 
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             })
         } else {
@@ -112,7 +112,7 @@ exports.getStudentById = async(req, res, next) => {
 
         if (students.length != 0) {
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             })
         } else {
@@ -140,7 +140,7 @@ exports.getStudentByFirstNameOrBranch = async(req, res, next) => {
 
         if (students.length != 0) {
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             })
         } else {
@@ -165,7 +165,7 @@ exports.addStudent = async(req, res, next) => {
         let dublicateEmail = await studentsData.filter(student => student.email == req.body.email);
 
         if (dublicateEmail.length != 0) {
-            throw new ApiError(404, "!!Email Conflict found")
+            throw new ApiError(404, "Dublicate Email't found")
                 // res.status(409).send({ message: "!!Email Conflict found" })
         } else {
 
@@ -190,7 +190,7 @@ exports.addStudent = async(req, res, next) => {
                 saveData.save(studentsData)
             }).then(() => {
                 return res.json({
-                    success: 1,
+                    success: true,
                     message: "Record Submit Sucessfully",
                 })
             })
@@ -224,11 +224,10 @@ exports.updateStudentData = async(req, res, next) => {
                 saveData.save(studentsData);
             }).then(() => {
                 return res.json({
-                    success: 1,
+                    success: true,
                     message: "Student Record update sucessfully",
                 })
             })
-
         } else {
             throw new ApiError(404, "Record Doesn't Found");
         }
@@ -257,7 +256,7 @@ exports.deactiveStudentData = async(req, res, next) => {
                 saveData.save(studentsData);
             }).then(() => {
                 return res.json({
-                    success: 1,
+                    success: true,
                     message: "Student Record Delete sucessfully",
                 })
             })
