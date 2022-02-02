@@ -268,6 +268,3 @@ exports.deactiveStudentData = async(req, res, next) => {
         next(e)
     }
 }
-next(e)
-}
-}
