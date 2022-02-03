@@ -13,10 +13,10 @@ var studentsData = JSON.parse(fs.readFileSync(path.join(__dirname, "../db/studen
 exports.getStudent = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
         return res.json({
-            success: 1,
+            success: true,
             data: studentsData,
         })
     } catch (e) {
@@ -28,16 +28,20 @@ exports.getStudent = async(req, res, next) => {
 exports.getStudentByBranch = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
 
         } else {
-            let branch = req.params.branch;
-            let students = await studentsData.filter(student => student.branch == branch);
+            let branch = (req.params.branch);
+            branch = branch.toUpperCase();
 
+            if (!(branch === "IT" || branch === "ME" || branch === "EC" || branch === "EE" || branch === "CE")) {
+                throw new ApiError(404, "Your Branch is invalid");
+            }
+            let students = await studentsData.filter(student => student.branch == branch);
 
             if (students.length != 0) {
                 return res.json({
-                    success: 1,
+                    success: true,
                     data: students,
                 })
             } else {
@@ -53,7 +57,7 @@ exports.getStudentByBranch = async(req, res, next) => {
 exports.getStudentByName = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         let firstName = req.params.firstName
@@ -62,11 +66,11 @@ exports.getStudentByName = async(req, res, next) => {
 
         if (students.length != 0) {
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             });
         } else {
-            throw new ApiError(404, "!!Record Doesn't Found");
+            throw new ApiError(404, "Record Doesn't Found");
         }
     } catch (e) {
         next(e);
@@ -77,7 +81,7 @@ exports.getStudentByName = async(req, res, next) => {
 exports.getStudentByEmail = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         let email = req.params.email
@@ -85,11 +89,11 @@ exports.getStudentByEmail = async(req, res, next) => {
 
         if (students.length != 0) { // student 
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             })
         } else {
-            throw new ApiError(404, "!!Record Didn't Match");
+            throw new ApiError(404, "Record Didn't Match");
         }
     } catch (e) {
         next(e)
@@ -100,7 +104,7 @@ exports.getStudentByEmail = async(req, res, next) => {
 exports.getStudentById = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         let id = req.params.id
@@ -108,11 +112,11 @@ exports.getStudentById = async(req, res, next) => {
 
         if (students.length != 0) {
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             })
         } else {
-            throw new ApiError(404, "!!Record Didn't Match");
+            throw new ApiError(404, "Record Didn't Match");
 
         }
     } catch (e) {
@@ -124,7 +128,7 @@ exports.getStudentById = async(req, res, next) => {
 exports.getStudentByFirstNameOrBranch = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information") // file connecting
+            throw new ApiError(502, "Database is not connected to server") // file connecting
         }
 
         let firstName = req.params.firstName;
@@ -136,11 +140,11 @@ exports.getStudentByFirstNameOrBranch = async(req, res, next) => {
 
         if (students.length != 0) {
             return res.json({
-                success: 1,
+                success: true,
                 data: students,
             })
         } else {
-            throw new ApiError(404, "!!Record Doesn't Found");
+            throw new ApiError(404, "Record Doesn't Found");
         }
     } catch (e) {
         next(e)
@@ -151,7 +155,7 @@ exports.getStudentByFirstNameOrBranch = async(req, res, next) => {
 exports.addStudent = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
         body = req.body;
         if (body.length == 0) {
@@ -161,7 +165,7 @@ exports.addStudent = async(req, res, next) => {
         let dublicateEmail = await studentsData.filter(student => student.email == req.body.email);
 
         if (dublicateEmail.length != 0) {
-            throw new ApiError(404, "!!Email Conflict found")
+            throw new ApiError(404, "Dublicate Email't found")
                 // res.status(409).send({ message: "!!Email Conflict found" })
         } else {
 
@@ -186,8 +190,8 @@ exports.addStudent = async(req, res, next) => {
                 saveData.save(studentsData)
             }).then(() => {
                 return res.json({
-                    success: 1,
-                    message: "!!Record Submit Sucessfully",
+                    success: true,
+                    message: "Record Submit Sucessfully",
                 })
             })
         }
@@ -200,7 +204,7 @@ exports.addStudent = async(req, res, next) => {
 exports.updateStudentData = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
 
         const id = req.params.id;
@@ -220,13 +224,12 @@ exports.updateStudentData = async(req, res, next) => {
                 saveData.save(studentsData);
             }).then(() => {
                 return res.json({
-                    success: 1,
+                    success: true,
                     message: "Student Record update sucessfully",
                 })
             })
-
         } else {
-            throw new ApiError(404, "!!Record Doesn't Found");
+            throw new ApiError(404, "Record Doesn't Found");
         }
     } catch (e) {
         next(e)
@@ -237,7 +240,7 @@ exports.updateStudentData = async(req, res, next) => {
 exports.deactiveStudentData = async(req, res, next) => {
     try {
         if (!studentsData) {
-            throw new ApiError(502, "Error Occurred while retriving user information")
+            throw new ApiError(502, "Database is not connected to server")
         }
         const id = req.params.id;
         let index = await studentsData.findIndex((stud) => {
@@ -253,12 +256,12 @@ exports.deactiveStudentData = async(req, res, next) => {
                 saveData.save(studentsData);
             }).then(() => {
                 return res.json({
-                    success: 1,
+                    success: true,
                     message: "Student Record Delete sucessfully",
                 })
             })
         } else {
-            throw new ApiError(404, "!!Record Didn't Found");
+            throw new ApiError(404, "Record Didn't Found");
         }
     } catch (e) {
         next(e)
